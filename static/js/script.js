@@ -17,7 +17,7 @@ function toggleTheme() {
 })();
 
 // ===== STATUS =====
-setInterval(atualizarStatus, 5000);
+setInterval(atualizarStatus, 1000);
 atualizarStatus();
 
 function atualizarStatus() {
