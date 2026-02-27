@@ -119,11 +119,15 @@ def get_status():
 
         status = {item["code"]: item["value"] for item in data}
 
+        watts   = round(status.get("cur_power",   0) / 10,   1)
+        volts   = round(status.get("cur_voltage", 0) / 10,   1)
+        amperes = round(status.get("cur_current", 0) / 1000, 3)
+
         return {
             "ligada":  status.get("switch_1", False),
-            "watts":   round(status.get("cur_power",   0) / 10,   1),
-            "volts":   round(status.get("cur_voltage", 0) / 10,   1),
-            "amperes": round(status.get("cur_current", 0) / 1000, 3)
+            "watts":   watts   if watts   > 0 else "--",
+            "volts":   volts   if volts   > 0 else "--",
+            "amperes": amperes if amperes > 0 else "--"
         }
 
     except Exception as e:
