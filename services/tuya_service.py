@@ -33,7 +33,14 @@ def _sign(method, path, body, token=""):
     return sign, timestamp
 
 
+_token_cache = {"token": None, "expira": 0}
+
 def get_token():
+    agora = time.time()
+    
+    if _token_cache["token"] and agora < _token_cache["expira"]:
+        return _token_cache["token"]
+    
     path = "/v1.0/token?grant_type=1"
     sign, timestamp = _sign("GET", path, None)
 
@@ -50,7 +57,11 @@ def get_token():
     if not result.get("success"):
         raise Exception(f"Erro ao obter token: {result}")
 
-    return result["result"]["access_token"]
+    token = result["result"]["access_token"]
+    _token_cache["token"] = token
+    _token_cache["expira"] = agora + 3300
+    
+    return token
 
 
 def enviar_comando(value: bool):
